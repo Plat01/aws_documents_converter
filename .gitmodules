@@ -1,3 +1,4 @@
 [submodule "REST_API"]
 	path = REST_API
 	url = git@github.com:Plat01/rest_api_doc_converter.git
+	branch = main
