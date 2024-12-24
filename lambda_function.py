@@ -66,17 +66,14 @@ def stop_idle_instance(instance_id: str):
     """Stop an idle EC2 instance"""
     ec2.stop_instances(InstanceIds=[instance_id])
 
-def lambda_handler(event, context):
+def manage_conversion_instances(event, context):
     """Main Lambda handler function"""
     try:
-        # Get current state
         queue_length = get_queue_length()
         running_instances = get_running_instances()
         running_count = len(running_instances)
 
-        # Logic for managing instances
         if queue_length > 0 and running_count < MAX_INSTANCES:
-            # Start new instance if there are tasks and capacity
             start_new_instance()
             return {
                 'statusCode': 200,
@@ -84,7 +81,6 @@ def lambda_handler(event, context):
             }
         
         elif queue_length == 0 and running_count > 0:
-            # Stop instance if queue is empty
             stop_idle_instance(running_instances[0])
             return {
                 'statusCode': 200,
@@ -103,4 +99,4 @@ def lambda_handler(event, context):
         } 
     
 if __name__ == '__main__':
-    lambda_handler({}, {})
+    manage_conversion_instances({}, {})
